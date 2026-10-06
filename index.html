@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Huerto Escolar Nopales</title>
+    <style>
+      :root {
+        --verde-oscuro: #1d4d36;
+        --verde-medio: #2f7d57;
+        --verde-claro: #dfeecf;
+        --verde-fuerte: #3daf69;
+        --marron: #7b4b2b;
+        --beige: #f9f3e8;
+        --amarillo: #f5c95b;
+        --negro: #1e1e1e;
+        --blanco: #ffffff;
+        --gris: #4a4a4a;
+        --sombra: 0 12px 30px rgba(0, 0, 0, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        color: var(--negro);
+        background: linear-gradient(180deg, #edf7ee 0%, #f8f3ea 100%);
+        line-height: 1.7;
+      }
+
+      img {
+        display: block;
+        width: 100%;
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .container {
+        width: min(1200px, 92%);
+        margin: 0 auto;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: rgba(29, 77, 54, 0.94);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      .nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        min-height: 85px;
+        gap: 20px;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        color: var(--blanco);
+        font-weight: 700;
+        letter-spacing: 1px;
+      }
+
+      .logo img {
+        width: 58px;
+        height: 58px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid rgba(255,255,255,0.6);
+      }
+
+      .menu {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .menu a {
+        color: var(--blanco);
+        padding: 10px 14px;
+        border-radius: 999px;
+        font-weight: 600;
+        transition: 0.25s ease;
+      }
+
+      .menu a:hover,
+      .menu a.active {
+        background: rgba(255,255,255,0.12);
+      }
+
+      .hero {
+        position: relative;
+        min-height: 620px;
+        background: linear-gradient(rgba(15, 34, 25, 0.45), rgba(15, 34, 25, 0.5)),
+          url('https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: var(--blanco);
+      }
+
+      .hero-box {
+        background: rgba(7, 20, 15, 0.28);
+        border: 1px solid rgba(255,255,255,0.2);
+        backdrop-filter: blur(4px);
+        border-radius: 28px;
+        padding: 46px 36px;
+        max-width: 980px;
+        box-shadow: var(--sombra);
+      }
+
+      .hero-box h1 {
+        font-size: clamp(2.4rem, 5vw, 5rem);
+        line-height: 1.1;
+        margin-bottom: 18px;
+      }
+
+      .hero-box p {
+        font-size: 1.18rem;
+        margin-bottom: 28px;
+        max-width: 760px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .btn-row {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 18px;
+      }
+
+      .btn {
+        display: inline-block;
+        background: var(--amarillo);
+        color: var(--negro);
+        border-radius: 999px;
+        font-weight: 700;
+        padding: 15px 30px;
+        box-shadow: 0 10px 24px rgba(245, 201, 91, 0.35);
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+      }
+
+      .btn:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 16px 28px rgba(245, 201, 91, 0.4);
+      }
+
+      .btn.secondary {
+        background: rgba(255,255,255,0.12);
+        color: var(--blanco);
+        border: 1px solid rgba(255,255,255,0.4);
+        box-shadow: none;
+      }
+
+      section {
+        padding: 90px 0;
+      }
+
+      .section-title {
+        text-align: center;
+        margin-bottom: 42px;
+      }
+
+      .section-title span {
+        color: var(--verde-medio);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 0.8rem;
+        font-weight: 700;
+      }
+
+      .section-title h2 {
+        color: var(--verde-oscuro);
+        font-size: clamp(2rem, 3vw, 3rem);
+        margin-top: 10px;
+      }
+
+      .section-title p {
+        max-width: 720px;
+        margin: 14px auto 0;
+        color: var(--gris);
+        font-size: 1.05rem;
+      }
+
+      .intro-grid,
+      .grow-grid,
+      .links-grid,
+      .category-grid,
+      .gallery-grid,
+      .facts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 28px;
+      }
+
+      .card {
+        background: var(--blanco);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: var(--sombra);
+        transition: transform 0.28s ease, box-shadow 0.28s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 18px 34px rgba(0,0,0,0.14);
+      }
+
+      .card-img {
+        height: 235px;
+        object-fit: cover;
+      }
+
+      .card-body {
+        padding: 24px 22px 26px;
+      }
+
+      .card h3 {
+        color: var(--verde-oscuro);
+        margin-bottom: 10px;
+        font-size: 1.6rem;
+      }
+
+      .card p {
+        color: var(--gris);
+      }
+
+      .pt-0 {
+        padding-top: 0;
+      }
+
+      .links-grid .card {
+        background: linear-gradient(180deg, #f3f9f5 0%, #ffffff 100%);
+      }
+
+      .links-grid .card .card-body {
+        min-height: 170px;
+      }
+
+      .links-grid .card a {
+        display: block;
+        height: 100%;
+      }
+
+      .card-tag {
+        display: inline-block;
+        background: #e5f5ea;
+        color: var(--verde-medio);
+        border-radius: 999px;
+        font-weight: 800;
+        font-size: 0.74rem;
+        letter-spacing: 1px;
+        padding: 7px 10px;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+      }
+
+      .inventory {
+        background: #edf8ef;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--blanco);
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: var(--sombra);
+      }
+
+      th, td {
+        padding: 18px 20px;
+        text-align: left;
+        border-bottom: 1px solid #e4ebdf;
+      }
+
+      th {
+        background: var(--verde-oscuro);
+        color: var(--blanco);
+        font-size: 1rem;
+      }
+
+      tr:nth-child(even) {
+        background: #f9fbf7;
+      }
+
+      .gallery-item {
+        position: relative;
+        overflow: hidden;
+        border-radius: 18px;
+        box-shadow: var(--sombra);
+        min-height: 260px;
+      }
+
+      .gallery-item img {
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.35s ease;
+      }
+
+      .gallery-item:hover img {
+        transform: scale(1.06);
+      }
+
+      .gallery-item .caption {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(180deg, transparent, rgba(0,0,0,0.7));
+        color: var(--blanco);
+        padding: 16px 18px 18px;
+        font-weight: 700;
+      }
+
+      .location-wrap {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 30px;
+        align-items: center;
+      }
+
+      .map-box {
+        min-height: 330px;
+        border-radius: 22px;
+        background: linear-gradient(135deg, #dfeecf, #cfe4d7);
+        box-shadow: var(--sombra);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: var(--verde-oscuro);
+        font-weight: 700;
+        font-size: 1.4rem;
+      }
+
+      .info-box {
+        background: var(--blanco);
+        border-radius: 22px;
+        box-shadow: var(--sombra);
+        padding: 32px 28px;
+      }
+
+      .info-box h3 {
+        color: var(--verde-oscuro);
+        margin-bottom: 12px;
+        font-size: 2rem;
+      }
+
+      .cred {
+        background: linear-gradient(135deg, var(--verde-oscuro) 0%, var(--verde-medio) 100%);
+        color: var(--blanco);
+      }
+
+      .cred-box {
+        max-width: 850px;
+        margin: 0 auto;
+        background: rgba(255,255,255,0.08);
+        border-radius: 20px;
+        padding: 36px 28px;
+        text-align: center;
+        box-shadow: var(--sombra);
+      }
+
+      .cred-box h2 {
+        margin-bottom: 16px;
+        font-size: clamp(2rem, 3vw, 3rem);
+      }
+
+      .facts-grid .card {
+        background: #fffaf0;
+        border-left: 5px solid var(--amarillo);
+      }
+
+      .facts-grid .card-body {
+        padding-top: 20px;
+      }
+
+      .facts-grid h3 {
+        color: var(--marron);
+      }
+
+      .nopal-final {
+        padding-top: 20px;
+      }
+
+      footer {
+        background: #1a2820;
+        color: var(--blanco);
+        padding: 26px 0;
+        text-align: center;
+      }
+
+      @media (max-width: 760px) {
+        .nav {
+          flex-direction: column;
+          padding: 18px 0;
+        }
+
+        .menu {
+          gap: 8px;
+        }
+
+        .menu a {
+          font-size: 0.82rem;
+          padding: 8px 10px;
+        }
+
+        .hero {
+          min-height: 520px;
+        }
+
+        .hero-box {
+          padding: 30px 20px;
+        }
+
+        .location-wrap {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container nav">
+        <div class="logo">
+          <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=400&q=80" alt="Logo del huerto" />
+          <span>HUERTO ESCOLAR NOPALES</span>
+        </div>
+
+        <nav class="menu" aria-label="Menú principal">
+          <a href="#inicio" class="active">Inicio</a>
+          <a href="#introduccion">Introducción</a>
+          <a href="#siembra">Siembra</a>
+          <a href="#gastronomia">Gastronomía</a>
+          <a href="#salud">Salud</a>
+          <a href="#ciencia">Ciencia</a>
+          <a href="#inventario">Inventario</a>
+          <a href="#galeria">Galería</a>
+          <a href="#ubicacion">Ubicación</a>
+          <a href="#creditos">Créditos</a>
+        </nav>
+      </div>
+    </header>
+
+    <section class="hero" id="inicio">
+      <div class="container">
+        <div class="hero-box">
+          <h1>HUERTO ESCOLAR NOPALES</h1>
+          <p>
+            Un proyecto educativo, creativo y sostenible donde aprendemos a sembrar, cuidar y aprovechar el nopal como recurso valioso para la alimentación, la salud y la innovación.
+          </p>
+          <div class="btn-row">
+            <a class="btn" href="#introduccion">Explorar proyecto</a>
+            <a class="btn secondary" href="#galeria">Ver galería</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <main>
+      <section id="introduccion">
+        <div class="container">
+          <div class="section-title">
+            <span>Proyecto</span>
+            <h2>Introducción al huerto escolar</h2>
+            <p>
+              En el huerto escolar aprendemos a valorar la naturaleza, la responsabilidad ambiental y la importancia del trabajo colectivo. Aquí se vinculan la ciencia, la alimentación, la salud y la creatividad.
+            </p>
+          </div>
+
+          <div class="intro-grid">
+            <article class="card">
+              <img class="card-img" src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=900&q=80" alt="Nopal" />
+              <div class="card-body">
+                <h3>¿Qué es?</h3>
+                <p>Es un espacio escolar para cultivar plantas, observar el crecimiento de los cultivos y desarrollar habilidades de cuidado responsable del medio ambiente.</p>
+              </div>
+            </article>
+
+            <article class="card">
+              <img class="card-img" src="https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&w=900&q=80" alt="Huerto escolar" />
+              <div class="card-body">
+                <h3>Objetivo</h3>
+                <p>Promover la educación ambiental y la alimentación saludable mediante el cultivo de productos como el nopal, la albahaca, el jitomate y otras plantas útiles.</p>
+              </div>
+            </article>
+
+            <article class="card">
+              <img class="card-img" src="https://images.unsplash.com/photo-1471193945509-9ad0617afabf?auto=format&fit=crop&w=900&q=80" alt="Aprendizaje sustentable" />
+              <div class="card-body">
+                <h3>Valor educativo</h3>
+                <p>Fomenta la creatividad, la observación, el trabajo en equipo, el respeto por la naturaleza y el aprendizaje práctico de la biología y la sostenibilidad.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="siembra">
+        <div class="container">
+          <div class="section-title">
+            <span>Ciclo del huerto</span>
+            <h2>Siembra, cuidado y cosecha</h2>
+            <p>
+              El huerto sigue un proceso natural donde cada etapa requiere atención, observación y dedicación. Desde el inicio del cultivo hasta la cosecha final, se vive un aprendizaje constante.
+            </p>
+          </div>
+
+          <div class="grow-grid">
+            <article class="card">
+              <img class="card-img" src="https://images.unsplash.com/photo-1464226184884-fa52acbd5fdb?auto=format&fit=crop&w=900&q=80" alt="Siembra" />
+              <div class="card-body">
+                <span class="card-tag">1. Siembra</span>
+                <h3>Preparación</h3>
+                <p>Antes de sembrar, se seleccionan semillas o plantas sanas, se prepara la tierra y se revisan las condiciones del lugar para asegurar un buen crecimiento.</p>
+              </div>
+            </article>
+
+            <article class="card">
+              <img class="card-img" src="https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&w=900&q=80" alt="Cuidado del huerto" />
+              <div class="card-body">
+                <span class="card-tag">2. Cuidado</span>
+                <h3>Mantenimiento</h3>
+                <p>Se riegan, se eliminan hierbas no deseadas, se revisa la exposición solar y se protege cada planta para mantenerla sana y fuerte.</p>
+              </div>
+            </article>
+
+            <article class="card">
+              <img class="card-img" src="https://images.unsplash.com/photo-1416871593376-42d747aef8d3?auto=format&fit=crop&w=900&q=80" alt="Cosecha" />
+              <div class="card-body">
+                <span class="card-tag">3. Cosecha</span>
+                <h3>Recolección</h3>
+                <p>Cuando la planta está lista, se cosecha con cuidado y se aprovecha su valor en alimentos, productos artesanales, actividades de aprendizaje y experimentación.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="container">
+          <div class="section-title">
+            <span>Explora</span>
+            <h2>Enlaces a otras páginas</h2>
+            <p>Descubre los principales temas del huerto escolar.</p>
+          </div>
+
+          <div class="links-grid">
+            <article class="card">
+              <a href="#gastronomia">
+                <div class="card-body">
+                  <span class="card-tag">Gastronomía</span>
+                  <h3>Sabores del huerto</h3>
+                  <p>Recetas, platillos y bebidas elaboradas con ingredientes frescos y naturales.</p>
+                </div>
+              </a>
+            </article>
+
+            <article class="card">
+              <a href="#salud">
+                <div class="card-body">
+                  <span class="card-tag">Salud</span>
+                  <h3>Beneficios naturales</h3>
+                  <p>Conoce los usos medicinales y cosméticos del nopal y otras plantas del huerto.</p>
+                </div>
+              </a>
+            </article>
+
+            <article class="card">
+              <a href="#ciencia">
+                <div class="card-body">
+                  <span class="card-tag">Ciencia</span>
+                  <h3>Innovación verde</h3>
+                  <p>Explora el uso de materiales sostenibles como bioplásticos y cuero vegano.</p>
+                </div>
+              </a>
+            </article>
+
+            <article class="card">
+              <a href="#inventario">
+                <div class="card-body">
+                  <span class="card-tag">Inventario</span>
+                  <h3>Control del huerto</h3>
+                  <p>Consulta la cantidad y estado de los materiales, cultivos y recursos disponibles.</p>
+                </div>
+              </a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="gastronomia">
+        <div class="container">
+          <div class="section-title">
+            <span>Alimentación</span>
+            <h2>Gastronomía</h2>
+            <p>El huerto también nos enseña a preparar alimentos sabrosos, nutritivos y llenos de tradición.</p>
+          </div>
+
+          <div class="category-grid">
+            <article class="card">
+              <img class="card-img" src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=80" alt="Platillos" />
+              <div class="card-body">
+                <h3>Platillos</h3>
+                <p>Los nopales pueden prepararse a la plancha, al vapor, con huevo, en tacos, sopas y guisos nutritivos.</p>
+              </div>
+            </article>
+
+            <article class="card">
+              <img class="card-img" src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=900&q=80" alt="Tortillas" />
+              <div class="card-body">
+                <h3>Tortillas</h3>
+                <p>Las tortillas acompañan desde tacos con nopal hasta platillos con frijoles, queso, aguacate y salsa casera.</p>
+              </div>
+            </article>
+
+            <article class="card">
+              <img class="card-img" src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2e6?auto=format&fit=crop&w=900&q=80" alt="Bebidas" />
+              <div class="card-body">
+                <h3>Bebidas</h3>
+                <p>También se pueden preparar aguas frescas, jugos naturales y infusiones para complementar una alimentación saludable.</p>
+              </div>
+            </article>
+
+            <article class="card">
+              <img class="card-img" src="https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=900&q=80" alt="Postres" />
+              <div class="card-body">
+                <h3>Postres</h3>
+                <p>Con frutas y otros ingredientes del huerto se crean dulces sencillos y caseros, llenos de sabor natural.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="salud">
+        <div class="container">
+          <div class="section-title">
+            <span>Bienestar</span>
+            <h2>Salud</h2>
+            <p>El huerto escolar nos enseña que la naturaleza también puede aportar bienestar físico y emocional.</p>
+          </div>
+
+          <div class="category-grid">
+            <article class="card">
+              <img class="card-img" src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80" alt="Medicinal" />
+              <div class="card-body">
+                <h3>Medicinal</h3>
+                <p>El nopal se reconoce por sus propiedades hidratantes, antioxidantes y por ayudar a mantener un estilo de vida saludable.</p>
+              </div>
+            </article>
+
+            <article class="card">
+              <img class="card-img" src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=900&q=80" alt="Cosméticos" />
+              <div class="card-body">
+                <h3>Cosméticos</h3>
+                <p>Sus propiedades naturales también pueden aprovecharse en productos de cuidado personal, favoreciendo la hidratación y el cuidado de la piel.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="ciencia">
+        <div class="container">
+          <div class="section-title">
+            <span>Innovación</span>
+            <h2>Ciencia</h2>
+            <p>El huerto es un laboratorio vivo donde se experimenta con materiales, procesos y soluciones sostenibles.</p>
+          </div>
+
+          <div class="category-grid">
+            <article class="card">
+              <img class="card-img" src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=900&q=80" alt="Bioplásticos" />
+              <div class="card-body">
+                <h3>Bioplásticos</h3>
+                <p>Se estudian alternativas ecológicas para reemplazar plásticos convencionales y reducir el impacto ambiental.</p>
+              </div>
+            </article>
+
+            <article class="card">
+              <img class="card-img" src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=900&q=80" alt="Cuero vegano" />
+              <div class="card-body">
+                <h3>Cuero vegano</h3>
+                <p>Se exploran materiales alternativos que imitan el cuero y promueven la creatividad con conciencia ecológica.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="inventory" id="inventario">
+        <div class="container">
+          <div class="section-title">
+            <span>Registro</span>
+            <h2>Inventario del huerto</h2>
+            <p>Un sistema para organizar materiales, cultivos y herramientas del proyecto escolar.</p>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Unidad</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Nopal</td>
+                <td>52</td>
+                <td>piezas</td>
+                <td>Listo para cosecha</td>
+              </tr>
+              <tr>
+                <td>Tomates</td>
+                <td>24</td>
+                <td>piezas</td>
+                <td>En crecimiento</td>
+              </tr>
+              <tr>
+                <td>Frijoles</td>
+                <td>15</td>
+                <td>macetas</td>
+                <td>Activos</td>
+              </tr>
+              <tr>
+                <td>Semillas</td>
+                <td>180</td>
+                <td>gramos</td>
+                <td>Almacén</td>
+              </tr>
+              <tr>
+                <td>Recipientes</td>
+                <td>28</td>
+                <td>unidades</td>
+                <td>Disponibles</td>
+              </tr>
+              <tr>
+                <td>Herramientas</td>
+                <td>12</td>
+                <td>juegos</td>
+                <td>En buen estado</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="galeria">
+        <div class="container">
+          <div class="section-title">
+            <span>Visión</span>
+            <h2>Galería de fotos del huerto escolar</h2>
+            <p>Observa la belleza y el esfuerzo que se vive cada día en el huerto.</p>
+          </div>
+
+          <div class="gallery-grid">
+            <div class="gallery-item">
+              <img src="https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&w=900&q=80" alt="Huerto general" />
+              <div class="caption">Vista general</div>
+            </div>
+            <div class="gallery-item">
+              <img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=900&q=80" alt="Nopal" />
+              <div class="caption">Nopal</div>
+            </div>
+            <div class="gallery-item">
+              <img src="https://images.unsplash.com/photo-1471193945509-9ad0617afabf?auto=format&fit=crop&w=900&q=80" alt="Aprendizaje" />
+              <div class="caption">Aprendizaje</div>
+            </div>
+            <div class="gallery-item">
+              <img src="https://images.unsplash.com/photo-1464226184884-fa52acbd5fdb?auto=format&fit=crop&w=900&q=80" alt="Cuidado" />
+              <div class="caption">Cuidado del huerto</div>
+            </div>
+            <div class="gallery-item">
+              <img src="https://images.unsplash.com/photo-1416871593376-42d747aef8d3?auto=format&fit=crop&w=900&q=80" alt="Cosecha" />
+              <div class="caption">Cosecha</div>
+            </div>
+            <div class="gallery-item">
+              <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=900&q=80" alt="Plantas" />
+              <div class="caption">Plantas del huerto</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="ubicacion">
+        <div class="container">
+          <div class="section-title">
+            <span>Localización</span>
+            <h2>Ubicación del huerto escolar</h2>
+            <p>El huerto está ubicado en un espacio cercano a la comunidad escolar para facilitar el trabajo de estudiantes y docentes.</p>
+          </div>
+
+          <div class="location-wrap">
+            <div class="map-box">Mapa de ubicación</div>
+            <div class="info-box">
+              <h3>Dirección</h3>
+              <p>Huerto Escolar Nopales<br />Calle de la Naturaleza 123<br />Colonia Educación Verde<br />Ciudad de México</p>
+              <br />
+              <h3>Contacto</h3>
+              <p>Teléfono: (123) 456-7890<br />Correo: huerto.nopales@escuela.edu.mx</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="cred" id="creditos">
+        <div class="container">
+          <div class="cred-box">
+            <h2>Créditos</h2>
+            <p>
+              Este proyecto fue realizado con el apoyo de docentes, estudiantes y la comunidad escolar, con el propósito de promover la educación ambiental, la sostenibilidad y la creación de conciencia sobre el uso responsable de la naturaleza.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="container">
+          <div class="section-title">
+            <span>Curiosidades</span>
+            <h2>Datos curiosos</h2>
+            <p>El nopal no solo es una planta útil, también es un símbolo de resistencia, salud y tradición.</p>
+          </div>
+
+          <div class="facts-grid">
+            <article class="card">
+              <img class="card-img" src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=900&q=80" alt="Dato 1" />
+              <div class="card-body">
+                <h3>Dato 1</h3>
+                <p>El nopal puede vivir con poca agua y se adapta muy bien a climas secos.</p>
+              </div>
+            </article>
+
+            <article class="card">
+              <img class="card-img" src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80" alt="Dato 2" />
+              <div class="card-body">
+                <h3>Dato 2</h3>
+                <p>Es una planta rica en fibra y agua, por lo que aporta hidratación y bienestar.</p>
+              </div>
+            </article>
+
+            <article class="card">
+              <img class="card-img" src="https://images.unsplash.com/photo-1471193945509-9ad0617afabf?auto=format&fit=crop&w=900&q=80" alt="Dato 3" />
+              <div class="card-body">
+                <h3>Dato 3</h3>
+                <p>Los huertos escolares ayudan a fortalecer la responsabilidad ambiental y la conexión con la naturaleza.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="nopal-final">
+        <div class="container">
+          <div class="section-title">
+            <span>Final</span>
+            <h2>Galería final de nopal</h2>
+            <p>Un cierre visual con las plantas más representativas del huerto.</p>
+          </div>
+
+          <div class="gallery-grid">
+            <div class="gallery-item">
+              <img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=800&q=80" alt="Nopal 1" />
+              <div class="caption">Nopal fresco</div>
+            </div>
+            <div class="gallery-item">
+              <img src="https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&w=800&q=80" alt="Nopal 2" />
+              <div class="caption">Cultivo saludable</div>
+            </div>
+            <div class="gallery-item">
+              <img src="https://images.unsplash.com/photo-1416871593376-42d747aef8d3?auto=format&fit=crop&w=800&q=80" alt="Nopal 3" />
+              <div class="caption">Cosecha del nopal</div>
+            </div>
+            <div class="gallery-item">
+              <img src="https://images.unsplash.com/photo-1471193945509-9ad0617afabf?auto=format&fit=crop&w=800&q=80" alt="Nopal 4" />
+              <div class="caption">Huerto y aprendizaje</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">© 2026 Huerto Escolar Nopales | Proyecto educativo y sostenible</div>
+    </footer>
+
+    <script>
+      const links = document.querySelectorAll('.menu a');
+      const sections = document.querySelectorAll('main section[id], section[id]');
+
+      const setActiveLink = () => {
+        let current = 'inicio';
+        sections.forEach((section) => {
+          const top = section.getBoundingClientRect().top;
+          if (top <= 180) current = section.getAttribute('id');
+        });
+
+        links.forEach((link) => {
+          const href = link.getAttribute('href');
+          link.classList.toggle('active', href === '#' + current);
+        });
+      };
+
+      window.addEventListener('scroll', setActiveLink);
+      setActiveLink();
+    </script>
+  </body>
+</html>
